@@ -60,7 +60,9 @@ class masked_face_detection:
         image_resized = cv2.resize(image, target_shape)
         image_np = image_resized / 255.0  # 归一化到0~1
         image_exp = np.expand_dims(image_np, axis=0)
+        tic = time.time()
         y_bboxes_output, y_cls_output = tf_inference(self.sess, self.graph, image_exp)
+        print("inference_time ", time.time() - tic)
 
         # remove the batch dimension, for batch is always 1 for inference.
         y_bboxes = decode_bbox(self.anchors_exp, y_bboxes_output)[0]
